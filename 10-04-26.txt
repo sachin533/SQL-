@@ -1,0 +1,98 @@
+6.Find which salespeople currently have orders in the Orders table.
+
+mysql> SELECT DISTINCT s.snum
+    -> FROM salespeople s
+    -> JOIN orders o ON s.snum = o.snum;
++------+
+| snum |
++------+
+| 1001 |
+| 1002 |
+| 1003 |
+| 1004 |
+| 1007 |
++------+
+
+=======================================================================================================
+=======================================================================================================
+7. List names of all customers matched with the salespeople serving them.
+
+mysql> SELECT c.CNAME, s.SNAME
+    -> FROM customers c
+    -> JOIN salespeople s ON c.SNUM = s.SNUM;
++----------+---------+
+| CNAME    | SNAME   |
++----------+---------+
+| Hoffman  | Peel    |
+| Giovanni | AxelRod |
+| Liu      | Serres  |
+| Grass    | Serres  |
+| Clemens  | Peel    |
+| Pereira  | Motika  |
+| Cisneros | Rifkin  |
++----------+---------+
+7 rows in set (0.00 sec)
+
+=======================================================================================================
+===================================================================================================================
+
+
+8. Find the names and numbers of all salespeople who had more than one customer.
+mysql> SELECT s.snum, s.sname, COUNT(c.cnum) AS customer_count
+    -> FROM salespeople s
+    -> JOIN customers c ON s.snum = c.snum
+    -> GROUP BY s.snum, s.sname
+    -> HAVING COUNT(c.cnum) > 1;
++------+--------+----------------+
+| snum | sname  | customer_count |
++------+--------+----------------+
+| 1001 | Peel   |              2 |
+| 1002 | Serres |              2 |
++------+--------+----------------+
+2 rows in set (0.01 sec)
+=======================================================================================================
+====================================================================================
+
+9. Count the orders of each of the salespeople and output the results in descending order.
+mysql> SELECT s.snum, COUNT(o.onum) AS order_count
+    -> FROM salespeople s
+    -> JOIN orders o ON s.snum = o.snum
+    -> GROUP BY s.snum
+    -> ORDER BY order_count DESC;
++------+-------------+
+| snum | order_count |
++------+-------------+
+| 1001 |           3 |
+| 1002 |           2 |
+| 1003 |           2 |
+| 1007 |           2 |
+| 1004 |           1 |
++------+-------------+
+5 rows in set (0.00 sec)
+
+
+=====================================================================================================================================
+======================================================================================================================================
+
+
+10. List the Customer table if and only if one or more of the customers in the Customer table are
+located in San Jose.
+
+mysql> SELECT *
+    -> FROM customers
+    -> WHERE EXISTS (
+    ->     SELECT 1
+    ->     FROM customers
+    ->     WHERE city = 'San Jose'
+    -> );
++------+----------+----------+--------+------+
+| CNUM | CNAME    | CITY     | RATING | SNUM |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Clemens  | London   |    100 | 1001 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
++------+----------+----------+--------+------+
