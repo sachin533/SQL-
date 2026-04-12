@@ -1,0 +1,74 @@
+11. Match salespeople to customers according to what city they lived in.
+
+ SELECT s.city, s.sname, c.cname
+    -> FROM salespeople s
+    -> JOIN customers c
+    -> ON s.city = c.city;
++----------+--------+----------+
+| city     | sname  | cname    |
++----------+--------+----------+
+| London   | Fran   | Hoffman  |
+| London   | Motika | Hoffman  |
+| London   | Peel   | Hoffman  |
+| San Jose | Serres | Liu      |
+| London   | Fran   | Clemens  |
+| London   | Motika | Clemens  |
+| London   | Peel   | Clemens  |
+| San Jose | Serres | Cisneros |
++----------+--------+----------+
+
+
+12. Find the largest order taken by each salesperson.
+mysql> SELECT s.snum, s.sname, MAX(o.amt) AS largest_order
+    -> FROM salespeople s
+    -> JOIN orders o
+    -> ON s.snum = o.snum
+    -> GROUP BY s.snum, s.sname;
++------+---------+---------------+
+| snum | sname   | largest_order |
++------+---------+---------------+
+| 1007 | Rifkin  |       1098.16 |
+| 1004 | Motika  |       1900.10 |
+| 1001 | Peel    |       9891.88 |
+| 1002 | Serres  |       5160.45 |
+| 1003 | AxelRod |       1713.23 |
++------+---------+---------------+
+13. Find customers in San Jose who have a rating above 200.
+
+mysql> SELECT c.city, c.rating
+    -> FROM Customers c
+    -> WHERE c.rating >= 200
+    -> AND c.city = 'San Jose';
++----------+--------+
+| city     | rating |
++----------+--------+
+| San Jose |    200 |
+| San Jose |    300 |
++----------+--------+
+
+
+14. List the names and commissions of all salespeople in London.
+
+mysql> select sname , comm from salespeople where city = 'london';
++--------+------+
+| sname  | comm |
++--------+------+
+| Peel   | 0.12 |
+| Motika | 0.11 |
+| Fran   | 0.26 |
++--------+------+
+
+
+15. List all the orders of salesperson Motika from the Orders table.
+
+SELECT s.snum, s.sname, o.onum, o.amt, o.odate
+    -> FROM orders o
+    -> JOIN salespeople s
+    -> ON s.snum = o.snum
+    -> WHERE s.sname = 'Motika';
++------+--------+------+---------+------------+
+| snum | sname  | onum | amt     | odate      |
++------+--------+------+---------+------------+
+| 1004 | Motika | 3002 | 1900.10 | 1996-10-03 |
++------+--------+------+---------+------------+
+1 row in set (0.00 sec)
