@@ -1,0 +1,80 @@
+ 16.Find all customers with orders on October 3.
+ 
+ 
+  SELECT c.cname, o.odate
+    -> FROM customers c
+    -> JOIN orders o
+    ->   ON c.cnum = o.cnum
+    -> WHERE o.odate = '1996-10-03';
++----------+------------+
+| cname    | odate      |
++----------+------------+
+| Cisneros | 1996-10-03 |
+| Pereira  | 1996-10-03 |
+| Hoffman  | 1996-10-03 |
+| Liu      | 1996-10-03 |
+| Cisneros | 1996-10-03 |
++----------+------------+
+
+ 
+17. Give the sums of the amounts from the Orders table, 
+grouped by date, eliminating all those 
+dates where the SUM was not at least 2000.00 above the MAX amount. 
+
+ SELECT odate, SUM(amt) AS total_amt
+    -> FROM orders
+    -> GROUP BY odate
+    -> HAVING SUM(amt) >= 2000;
++------------+-----------+
+| odate      | total_amt |
++------------+-----------+
+| 1996-10-03 |   8944.59 |
+| 1996-10-05 |   4723.00 |
+| 1996-10-06 |  11201.83 |
++------------+-----------+
+
+
+18. Select all orders that had amounts that were greater than 
+at least one of the orders from 
+October 6. 
+
+ select * from orders where amt > any (select amt from  orders where odate = '1996-10-06');
++------+---------+------------+------+------+
+| ONUM | AMT     | ODATE      | CNUM | SNUM |
++------+---------+------------+------+------+
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1996-10-03 | 2003 | 1002 |
+| 3008 | 4723.00 | 1996-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-10-04 | 2002 | 1003 |
+| 3011 | 9891.88 | 1996-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+ 
+
+19. Write a query that uses the EXISTS operator to extract all salespeople who have customers 
+with a rating of 300. 
+
+select s.snum , s.sname from salespeople s where exists (select 1 from customers c where s.snum = s.snum and c.rating = 300);
++------+---------+
+| snum | sname   |
++------+---------+
+| 1001 | Peel    |
+| 1002 | Serres  |
+| 1003 | AxelRod |
+| 1004 | Motika  |
+| 1005 | Fran    |
+| 1007 | Rifkin  |
++------+---------+
+6 rows in set (0.01 sec)
+
+
+20. Find all pairs of customers having the same rating. 
+
+ select c1.cnum, c2.cnum, c1.rating from customers c1 join customers c2 on c1.rating = c2.rating and c1.cnum < c2.cnum;
++------+------+--------+
+| cnum | cnum | rating |
++------+------+--------+
+| 2001 | 2006 |    100 |
+| 2001 | 2007 |    100 |
+| 2002 | 2003 |    200 |
+| 2004 | 2008 |    300 |
+| 2006 | 2007 |    100 |
++------+------+--------+
