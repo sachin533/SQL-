@@ -1,0 +1,89 @@
+36. Select all the possible combinations of customers that you can assign. 
+
+
+ select c1.cname , c2.cname from customers c1, customers c2 where c1.cname < c2.cname;
++----------+----------+
+| cname    | cname    |
++----------+----------+
+| Cisneros | Hoffman  |
+| Clemens  | Hoffman  |
+| Grass    | Hoffman  |
+| Giovanni | Hoffman  |
+| Cisneros | Giovanni |
+| Clemens  | Giovanni |
+| Cisneros | Liu      |
+| Clemens  | Liu      |
+| Grass    | Liu      |
+| Giovanni | Liu      |
+| Hoffman  | Liu      |
+| Cisneros | Grass    |
+| Clemens  | Grass    |
+| Giovanni | Grass    |
+| Cisneros | Clemens  |
+| Cisneros | Pereira  |
+| Clemens  | Pereira  |
+| Grass    | Pereira  |
+| Liu      | Pereira  |
+| Giovanni | Pereira  |
+| Hoffman  | Pereira  |
++----------+----------+
+
+37. Select all orders that are greater than the average for October 4. 
+
+
+mysql> select * from orders where amt > ( select avg(amt) from orders where odate = '1996-10-04');
++------+---------+------------+------+------+
+| ONUM | AMT     | ODATE      | CNUM | SNUM |
++------+---------+------------+------+------+
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1996-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1996-10-03 | 2008 | 1007 |
+| 3008 | 4723.00 | 1996-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-10-04 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1996-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
+
+38. Write a select command using a corelated subquery that selects the names and numbers of all 
+customers with ratings equal to the maximum for their city.
+
+ select c1.cname , c1.cnum from customers c1 where c1.rating =(select max(c2.rating) from customers c2 where c2.city = c1.city);
++----------+------+
+| cname    | cnum |
++----------+------+
+| Hoffman  | 2001 |
+| Giovanni | 2002 |
+| Grass    | 2004 |
+| Clemens  | 2006 |
+| Cisneros | 2008 |
++----------+------+
+5 rows in set (0.01 sec) 
+
+
+
+
+39. Write a query that totals the orders for each day and places
+ the results in descending order. 
+ 
+  select odate, count(*) as total_orders from orders group by odate order by odate desc;
++------------+--------------+
+| odate      | total_orders |
++------------+--------------+
+| 1996-10-06 |            2 |
+| 1996-10-05 |            1 |
+| 1996-10-04 |            2 |
+| 1996-10-03 |            5 |
++------------+--------------+
+
+
+40. Write a select command that produces the rating followed by the name of each customer in 
+San Jose.
+mysql> select cname , city , rating from customers where city = 'san jose';
++----------+----------+--------+
+| cname    | city     | rating |
++----------+----------+--------+
+| Liu      | San Jose |    200 |
+| Cisneros | San Jose |    300 |
++----------+----------+--------+
+2 rows in set (0.00 sec)
