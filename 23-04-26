@@ -1,0 +1,47 @@
+41. Find all orders with amounts smaller than 
+any amount for a customer in San Jose. 
+mysql> SELECT *
+    -> FROM orders
+    -> WHERE amt < ANY (
+    ->     SELECT o.amt
+    ->     FROM orders o
+    ->     JOIN customers c ON o.cnum = c.cnum
+    ->     WHERE c.city = 'San Jose'
+    -> );
++------+---------+------------+------+------+
+| ONUM | AMT     | ODATE      | CNUM | SNUM |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1996-10-03 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-10-03 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-10-03 | 2001 | 1001 |
+| 3006 | 1098.16 | 1996-10-03 | 2008 | 1007 |
+| 3007 |   75.75 | 1996-10-04 | 2002 | 1003 |
+| 3008 | 4723.00 | 1996-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-10-04 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-10-06 | 2004 | 1002 |
+
+
+42. Find all orders with above average amounts for their customers.
+mysql> select o.onum, o.amt from orders o where o.amt >(select avg(o1.amt) from orders o1 where o1.cnum = o.cnum);
++------+---------+
+| onum | amt     |
++------+---------+
+| 3006 | 1098.16 |
+| 3009 | 1713.23 |
+| 3011 | 9891.88 |
++------+---------+
+3 rows in set (0.00 sec)
+
+
+43. Write a query that selects the highest rating in each city.
+mysql> select city , max(rating) from customers group by city;
++----------+-------------+
+| city     | max(rating) |
++----------+-------------+
+| London   |         100 |
+| Rome     |         200 |
+| San Jose |         300 |
+| Berlin   |         300 |
++----------+-------------+
+4 rows in set (0.00 sec)
+
